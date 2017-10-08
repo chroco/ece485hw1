@@ -10,84 +10,78 @@ reg [3:1] SW;
 reg [1:0] DA, DB;
 
 parameter
-	Ago   = 7'b0000101,
-	Bgo   = 7'b0110101,
-	Astop = 7'b0110001,
-	Bstop = 7'b0000100;
+	Ago   = 4'b0001,
+	Bgo   = 4'b0010,
+	Astop = 4'b0100,
+	Bstop = 4'b1000;
 
-reg [6:0] State, NextState;
+reg [3:0] State, NextState;
+
+always @(posedge Clock)
+begin
+	if (RESET) 
+		State <= Bgo;
+	else
+		State <= NextState;
+end
 
 always @(State)
 begin
 case (State)
 	Ago: 
 		begin
-/*
-		SW[3:1] = 3'b000;
-		DA[1:0] = 2'b01;
-		DB[1:0] = 2'b01;
-//*/
 		SW = 3'b000;
 		DA = 2'b01;
 		DB = 2'b01;
-	end
+		end
 	Bgo: 
 		begin
-		SW[3:1] = 3'b011;
-		DA[1:0] = 2'b01;
-		DB[1:0] = 2'b01;
+		SW = 3'b011;
+		DA = 2'b01;
+		DB = 2'b01;
 		end
 	Astop: 
 		begin
-		SW[3:1] = 3'b011;
-		DA[1:0] = 2'b00;
-		DB[1:0] = 2'b01;
+		SW = 3'b011;
+		DA = 2'b00;
+		DB = 2'b01;
 		end
 	Bstop: 
 		begin
-		SW[3:1] = 3'b000;
-		DA[1:0] = 2'b01;
-		DB[1:0] = 2'b00;
+		SW = 3'b000;
+		DA = 2'b01;
+		DB = 2'b00;
 		end
 endcase
 end
 
-always @(posedge Clock)
-begin
-	if (RESET) State = Bgo;
-end
-
-always @(State)
+always @(State or SR[4] or SR[3] or SR[1] or SR[2])
 begin
 case (State) 
 	Ago:
-		if (RESET) begin
-			NextState = Bgo;
-		end else if (SR[2] && ~SR[4]) begin
+		begin
+		if (SR[2] && ~SR[4])
 			NextState = Bstop;
-		end	else if (SR[2] && SR[4]) begin
+		else if (SR[2] && SR[4])
 			NextState = Bgo;
 		end
 	Bgo:
-		if (RESET) begin
-			NextState = Bgo;
-		end else if (SR[1] && ~SR[3])begin
+		begin
+		if (SR[1] && ~SR[3])
 			NextState = Astop;
-		end else if ((SR[1] && SR[2]) || (SR[1] && ~SR[2] && ~SR[3])) begin
+		else if ((SR[1] && SR[2]) || (SR[1] && ~SR[2] && ~SR[3]))
 			NextState = Bstop;
-		end else if ((SR[1] && SR[3]) || (SR[1] && ~SR[2])) begin
+		else if ((SR[1] && SR[3]) || (SR[1] && ~SR[2]))
 			NextState = Ago;
 		end
 	Astop:
-		if (RESET) begin
-			NextState = Bgo;
-		end else if(SR[3]) begin
+		begin
+		if(SR[3])
 			NextState = Ago;
 		end
 	Bstop:
-		if (RESET) begin
-			NextState = Bgo;
-		end else if(SR[4]) begin
+		begin
+		if(SR[4])
 			NextState = Bgo;
 		end
 endcase

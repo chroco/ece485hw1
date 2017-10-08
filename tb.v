@@ -14,19 +14,39 @@ TrainState ts(SW,DA,DB,RESET,SR,Clock);
 initial
 begin
 //	$display();
-	$monitor($time, "%b %b %b %b %b\n",SR, SW, DA, DB );
+	$monitor($time, " %b %b %b %b %b",RESET, SR, SW, DA, DB );
 end
+
+initial
+begin
+	Clock = FALSE;
+	forever #CLOCK_WIDTH Clock = ~Clock;
+end
+
+// Generate RESET signal for two cycles
+
+initial
+begin
+	RESET = TRUE;
+	repeat (IDLE_CLOCKS) @(negedge Clock);
+	RESET = FALSE;
+end
+
+// Generate stimulus after waiting for reset
+
+initial
+begin
+	//repeat (6) @(negedge Clock); {RESET,SR} = 5'b10000;
+	repeat (50) @(negedge Clock); {RESET,SR} = 5'b00001;
+	repeat (50) @(negedge Clock); {RESET,SR} = 5'b00010;
+	repeat (50) @(negedge Clock); {RESET,SR} = 5'b00011;
+	repeat (50) @(negedge Clock); {RESET,SR} = 5'b00100;
+	repeat (50) @(negedge Clock); {RESET,SR} = 5'b00101;
+	repeat (50) @(negedge Clock); {RESET,SR} = 5'b00110;
+	repeat (50) @(negedge Clock); {RESET,SR} = 5'b00111;
+	//repeat (6) @(negedge Clock); {RESET,SR} = 5'b00100;
+	//repeat (6) @(negedge Clock); {RESET,SR} = 5'b00101;
+	//repeat (6) @(negedge Clock); {RESET,SR} = 5'b10111;
+end
+
 endmodule
-
-
-/*
-reg [6:0] i;
-	begin
-		for(i=7'b000_0000;i<7'b100_0000;i=i+7'b000_0001)begin
-			SR[1]=i[1];SR[2]=i[2];SR[3]=i[3];SR[4]=i[4];SR[5]=i[5];RESET=i[6];
-			#30;
-			$display(SW[3],SW[2],SW[1],DA[0],DB[0]);
-		end
-		$finish();
-	end
-//*/
