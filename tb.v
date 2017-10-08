@@ -9,12 +9,13 @@ parameter FALSE  = 1'b0;
 parameter CLOCK_CYCLE  = 20;
 parameter CLOCK_WIDTH  = CLOCK_CYCLE/2;
 parameter IDLE_CLOCKS  = 2;
+parameter CYCLE = 1;
 
 TrainState ts(SW,DA,DB,RESET,SR,Clock);
 initial
 begin
 //	$display();
-	$monitor($time, " %b %b %b %b %b",RESET, SR, SW, DA, DB );
+	$monitor($time, " %b %b %b %b %b",RESET ,SR, SW, DA, DB);
 end
 
 initial
@@ -36,17 +37,33 @@ end
 
 initial
 begin
-	//repeat (6) @(negedge Clock); {RESET,SR} = 5'b10000;
-	repeat (50) @(negedge Clock); {RESET,SR} = 5'b00001;
-	repeat (50) @(negedge Clock); {RESET,SR} = 5'b00010;
-	repeat (50) @(negedge Clock); {RESET,SR} = 5'b00011;
-	repeat (50) @(negedge Clock); {RESET,SR} = 5'b00100;
-	repeat (50) @(negedge Clock); {RESET,SR} = 5'b00101;
-	repeat (50) @(negedge Clock); {RESET,SR} = 5'b00110;
-	repeat (50) @(negedge Clock); {RESET,SR} = 5'b00111;
-	//repeat (6) @(negedge Clock); {RESET,SR} = 5'b00100;
-	//repeat (6) @(negedge Clock); {RESET,SR} = 5'b00101;
-	//repeat (6) @(negedge Clock); {RESET,SR} = 5'b10111;
+//*
+	repeat (CYCLE) @(negedge Clock);
+//	{RESET} = 1'b1;repeat (CYCLE) @(negedge Clock);
+	{SR} = 4'b0001;repeat (CYCLE) @(negedge Clock);
+//	$display(" %b %b %b %b %b",RESET ,SR, SW, DA, DB);
+	{SR} = 4'b0100;repeat (CYCLE) @(negedge Clock);
+//	$display(" %b %b %b %b %b",RESET ,SR, SW, DA, DB);
+	{SR} = 4'b1010;repeat (CYCLE) @(negedge Clock);
+//	$display(" %b %b %b %b %b",RESET ,SR, SW, DA, DB);
+//*/
+/*
+	repeat (CYCLE) @(negedge Clock);
+	{RESET} = 1'b1;repeat (CYCLE) @(negedge Clock);
+	{SR} = 4'b0000;repeat (CYCLE) @(negedge Clock);
+	{SR} = 4'b0001;repeat (CYCLE) @(negedge Clock);
+	{SR} = 4'b0010;repeat (CYCLE) @(negedge Clock);
+	{SR} = 4'b0011;repeat (CYCLE) @(negedge Clock);
+	{SR} = 4'b0100;repeat (CYCLE) @(negedge Clock);
+	{SR} = 4'b0101;repeat (CYCLE) @(negedge Clock);
+	{SR} = 4'b0110;repeat (CYCLE) @(negedge Clock);
+	{SR} = 4'b0111;repeat (CYCLE) @(negedge Clock);
+	{SR} = 4'b0100;repeat (CYCLE) @(negedge Clock);
+	{SR} = 4'b0101;repeat (CYCLE) @(negedge Clock);
+	{SR} = 4'b0111;repeat (CYCLE) @(negedge Clock);
+//*/
+//	$stop;
+	$finish;
 end
 
 endmodule

@@ -28,26 +28,22 @@ end
 always @(State)
 begin
 case (State)
-	Ago: 
-		begin
+	Ago: begin
 		SW = 3'b000;
 		DA = 2'b01;
 		DB = 2'b01;
 		end
-	Bgo: 
-		begin
+	Bgo: begin
 		SW = 3'b011;
 		DA = 2'b01;
 		DB = 2'b01;
 		end
-	Astop: 
-		begin
+	Astop: begin
 		SW = 3'b011;
 		DA = 2'b00;
 		DB = 2'b01;
 		end
-	Bstop: 
-		begin
+	Bstop: begin
 		SW = 3'b000;
 		DA = 2'b01;
 		DB = 2'b00;
@@ -55,18 +51,16 @@ case (State)
 endcase
 end
 
-always @(State or SR[4] or SR[3] or SR[1] or SR[2])
+always @(State or SR)//[4] or SR[3] or SR[1] or SR[2])
 begin
 case (State) 
-	Ago:
-		begin
+	Ago: begin
 		if (SR[2] && ~SR[4])
 			NextState = Bstop;
 		else if (SR[2] && SR[4])
 			NextState = Bgo;
 		end
-	Bgo:
-		begin
+	Bgo: begin
 		if (SR[1] && ~SR[3])
 			NextState = Astop;
 		else if ((SR[1] && SR[2]) || (SR[1] && ~SR[2] && ~SR[3]))
@@ -74,16 +68,20 @@ case (State)
 		else if ((SR[1] && SR[3]) || (SR[1] && ~SR[2]))
 			NextState = Ago;
 		end
-	Astop:
-		begin
+	Astop: begin
 		if(SR[3])
 			NextState = Ago;
 		end
-	Bstop:
-		begin
+	Bstop: begin
 		if(SR[4])
 			NextState = Bgo;
 		end
+/*
+	default:
+		begin
+			NextState = Astop;
+		end
+//*/
 endcase
 end
 
