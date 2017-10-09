@@ -61,12 +61,12 @@ case (State)
 			NextState = Bgo;
 		end
 	Bgo: begin
-		if (SR[1] && ~SR[3])
+		if ((SR[1] && SR[2]) || (SR[1] && ~SR[2] && ~SR[3]))
 			NextState = Astop;
-		else if ((SR[1] && SR[2]) || (SR[1] && ~SR[2] && ~SR[3]))
-			NextState = Bstop;
 		else if ((SR[1] && SR[3]) || (SR[1] && ~SR[2]))
 			NextState = Ago;
+		else if (SR[1] && ~SR[3])	
+			NextState = Bstop;
 		end
 	Astop: begin
 		if(SR[3])
