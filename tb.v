@@ -65,14 +65,14 @@ begin
 	{SR} = 4'b0010;repeat (TIMES) @(negedge Clock); // Init -> Bgo
 	{SR} = 4'b0100;repeat (TIMES) @(negedge Clock); // Bgo -> Init
 	{SR} = 4'b0010;repeat (TIMES) @(negedge Clock); // Init -> Bgo
-	{SR} = 4'b1010;repeat (TIMES) @(negedge Clock); // Bgo -> Ago
+	{SR} = 4'b0101;repeat (TIMES) @(negedge Clock); // Bgo -> Ago
 
 	{SR} = 4'b0010;repeat (TIMES) @(negedge Clock); // Ago -> Bstop
 	{SR} = 4'b1000;repeat (TIMES) @(negedge Clock); // Bstop -> Bgo
 	{SR} = 4'b0001;repeat (TIMES) @(negedge Clock); // Bgo -> Astop
 	{SR} = 4'b0100;repeat (TIMES) @(negedge Clock); // Astop -> Ago
 	
-	{SR} = 4'b0101;repeat (TIMES) @(negedge Clock); // Ago -> Bgo
+	{SR} = 4'b1010;repeat (TIMES) @(negedge Clock); // Ago -> Bgo
 	{SR} = 4'b0100;repeat (TIMES) @(negedge Clock); // Bgo -> Init
 	
 	{SR} = 4'b0011;repeat (TIMES) @(negedge Clock); // Init -> Astop
@@ -91,11 +91,11 @@ endmodule
 
 	{SR} = 4'b1000;repeat (TIMES) @(negedge Clock); // Ago -> Init
 	{SR} = 4'b0010;repeat (TIMES) @(negedge Clock); // Ago -> Bstop
-	{SR} = 4'b0101;repeat (TIMES) @(negedge Clock); // Ago -> Bgo
+	{SR} = 4'b1010;repeat (TIMES) @(negedge Clock); // Ago -> Bgo
 
 	{SR} = 4'b0100;repeat (TIMES) @(negedge Clock); // Bgo -> Init
 	{SR} = 4'b0001;repeat (TIMES) @(negedge Clock); // Bgo -> Astop
-	{SR} = 4'b1010;repeat (TIMES) @(negedge Clock); // Bgo -> Ago
+	{SR} = 4'b0101;repeat (TIMES) @(negedge Clock); // Bgo -> Ago
 
 	{SR} = 4'b0100;repeat (TIMES) @(negedge Clock); // Astop -> Ago
 	

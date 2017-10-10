@@ -72,32 +72,32 @@ case (State)
 endcase
 end
 
-always @(State or SR)//[4] or SR[3] or SR[1] or SR[2])
+always @(State or SR)
 begin
 	case (State) 
 		Init: begin 
 			if (SR[1] && !SR[2])
 				NextState = Ago;
-			else if (SR[1] && SR[2])
-				NextState = Astop;
 			else if (!SR[1] && SR[2])	
 				NextState = Bgo;
+			else if (SR[1] && SR[2])
+				NextState = Astop;
 			end
 		Ago: begin
-			if (SR[1] && SR[3])
-				NextState = Bgo;
+			if (SR[4])
+				NextState = Init;
 			else if (SR[2] && !SR[4])
 				NextState = Bstop;
-			else if (SR[4])
-				NextState = Init;
+			else if (SR[2] && SR[4])
+				NextState = Bgo;
 			end
 		Bgo: begin
-			if (SR[2] && SR[4])
-				NextState = Ago;
+			if (SR[3])
+				NextState = Init;
 			else if (SR[1] && !SR[3])
 				NextState = Astop;
-			else if (SR[3])
-				NextState = Init;
+			else if (SR[1] && SR[3])
+				NextState = Ago;
 			end
 		Astop: begin
 			if(SR[3])
