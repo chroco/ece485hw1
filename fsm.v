@@ -54,7 +54,7 @@ case (State)
 		DB = 2'b01;
 		end
  // Init and Bgo have the same output
-	Bgo: begin // o_0
+	Bgo: begin // 0_o
 		SW = 3'b011;
 		DA = 2'b01;
 		DB = 2'b01;

@@ -24,8 +24,8 @@ parameter TRUE   = 1'b1;
 parameter FALSE  = 1'b0;
 parameter CLOCK_TIMES  = 20;
 parameter CLOCK_WIDTH  = CLOCK_TIMES/2;
-parameter IDLE_CLOCKS  = 1;
-parameter TIMES = 1;
+parameter IDLE_CLOCKS  = 2;
+parameter TIMES = 2; // sensor triggerd for 2 cycles
 
 TrainState ts(SW,DA,DB,RESET,SR,Clock);
 initial
@@ -57,6 +57,7 @@ begin
 	{SR} = 4'b0001;repeat (TIMES) @(negedge Clock); // Init -> Ago
 	{SR} = 4'b1000;repeat (TIMES) @(negedge Clock); // Ago -> Init
 	{SR} = 4'b0001;repeat (TIMES) @(negedge Clock); // Init -> Ago
+	{SR} = 4'b0010;repeat (TIMES) @(negedge Clock); // Ago -> Bstop
 	
 	{RESET} = 1'b1;repeat (TIMES) @(negedge Clock); // RESET
 	{RESET} = 1'b0;repeat (TIMES) @(negedge Clock); // RESET
@@ -79,7 +80,6 @@ begin
 	{SR} = 4'b1000;repeat (TIMES) @(negedge Clock); // Ago -> Init
 	$finish;
 end
-
 endmodule
 /*
 	transitions
@@ -97,9 +97,9 @@ endmodule
 	{SR} = 4'b0001;repeat (TIMES) @(negedge Clock); // Bgo -> Astop
 	{SR} = 4'b1010;repeat (TIMES) @(negedge Clock); // Bgo -> Ago
 
-	{SR} = 4'b1000;repeat (TIMES) @(negedge Clock); // Bstop -> Bgo
-	
 	{SR} = 4'b0100;repeat (TIMES) @(negedge Clock); // Astop -> Ago
+	
+	{SR} = 4'b1000;repeat (TIMES) @(negedge Clock); // Bstop -> Bgo
 //*/
 
 
